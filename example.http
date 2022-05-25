@@ -1,0 +1,16 @@
+@url = http://localhost:4004
+
+
+#GET {{url}}/demo/Foo
+
+###
+GET {{url}}/my/Foo
+
+
+
+POST {{url}}/my/Foo
+Content-Type: application/json
+{
+    "name": 'Hello World!'
+}
+
