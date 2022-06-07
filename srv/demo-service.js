@@ -1,4 +1,4 @@
-const cds = require{'@sap/cds'};
+const cds = require('@sap/cds');
 
 module.exports = cds.service.impl(async (srv) => {
     

@@ -1,10 +1,19 @@
 @url = http://localhost:4004
 
 
+GET {{url}}/data/getData
+
+
+GET {{url}}/BookshopService.getData()
+
+
+GET {{url}}/bookshop
 #GET {{url}}/demo/Foo
 
 ###
-GET {{url}}/my/Foo
+
+GET {{url}}/catalog
+#GET {{url}}/my/Foo
 
 
 
@@ -13,4 +22,5 @@ Content-Type: application/json
 {
     "name": 'Hello World!'
 }
+
 

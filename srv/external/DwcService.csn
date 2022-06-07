@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "creator": "cds-dk 4.8.2"
+  },
+  "$version": "2.0",
+  "definitions": {
+    "DwcService.PurchasingPerspective": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "elements": {
+        "bprme": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "maktx": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "bsart": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "maktl": {
+          "type": "cds.String",
+          "length": 9
+        },
+        "ebeln": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10
+        },
+        "land1": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "matnr": {
+          "type": "cds.String",
+          "length": 40
+        },
+        "bstyp": {
+          "type": "cds.String",
+          "length": 1
+        },
+        "ebelp": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5
+        },
+        "ekorg": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "bukrs": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "name1": {
+          "type": "cds.String",
+          "length": 35
+        },
+        "lifnr": {
+          "type": "cds.String",
+          "length": 10
+        },
+        "meins": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "mtart": {
+          "type": "cds.String",
+          "length": 4
+        },
+        "aedat": {
+          "type": "cds.String",
+          "length": 8
+        },
+        "ekgrp": {
+          "type": "cds.String",
+          "length": 3
+        },
+        "brtwr": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 2
+        },
+        "menge": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3
+        },
+        "netwr": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 2
+        }
+      }
+    },
+    "DwcService": {
+      "kind": "service",
+      "@cds.external": true
+    }
+  }
+}

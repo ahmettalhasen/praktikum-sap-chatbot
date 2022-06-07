@@ -1,5 +1,5 @@
 ---
-_schema-version: '3.1'
+_schema-version: "3.1"
 ID: capProject
 version: 1.0.0
 description: "A simple CAP project."
@@ -18,6 +18,8 @@ modules:
     path: gen/srv
     parameters:
       buildpack: nodejs_buildpack
+      disk-quota: 512M
+      memory: 128M
     build-parameters:
       builder: npm-ci
     provides:
@@ -25,21 +27,30 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
-      - name: capProject-db
-
-  - name: capProject-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: capProject-db
+      - name: capProject-destination
+      - name: capProject-uaa
 
 resources:
-  - name: capProject-db
-    type: com.sap.xs.hdi-container
+  - name: capProject-destination
+    type: org.cloudfoundry.managed-service
     parameters:
-      service: hana # or 'hanatrial' on trial landscapes
-      service-plan: hdi-shared
-    properties:
-      hdi-service-name: ${service-name}
+      config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: dwc
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ibsolution-development-dwc-demo-cap-dwc-example-srv.cfapps.eu10.hana.ondemand.com
+          existing_destinations_policy: update
+      version: 1.0.0
+      service: destination
+      service-plan: lite
+  - name: capProject-uaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application

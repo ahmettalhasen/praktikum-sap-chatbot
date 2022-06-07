@@ -1,6 +1,6 @@
 using { db as my } from '../db/schema';
 
-service MyService {
+service MyService2 {
 
     entity Foo as projection on my.Foo;
 

@@ -1,0 +1,118 @@
+<edmx:Edmx Version="4.0">
+<edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+<edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+</edmx:Reference>
+<edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+<edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+</edmx:Reference>
+<edmx:DataServices>
+<Schema Namespace="DwcService">
+<EntityContainer Name="EntityContainer">
+<EntitySet Name="PurchasingPerspective" EntityType="DwcService.PurchasingPerspective"/>
+</EntityContainer>
+<EntityType Name="PurchasingPerspective">
+<Key>
+<PropertyRef Name="ebeln"/>
+<PropertyRef Name="ebelp"/>
+</Key>
+<Property Name="bprme" Type="Edm.String" MaxLength="3"/>
+<Property Name="maktx" Type="Edm.String" MaxLength="40"/>
+<Property Name="bsart" Type="Edm.String" MaxLength="4"/>
+<Property Name="maktl" Type="Edm.String" MaxLength="9"/>
+<Property Name="ebeln" Type="Edm.String" MaxLength="10" Nullable="false"/>
+<Property Name="land1" Type="Edm.String" MaxLength="3"/>
+<Property Name="matnr" Type="Edm.String" MaxLength="40"/>
+<Property Name="bstyp" Type="Edm.String" MaxLength="1"/>
+<Property Name="ebelp" Type="Edm.String" MaxLength="5" Nullable="false"/>
+<Property Name="ekorg" Type="Edm.String" MaxLength="4"/>
+<Property Name="bukrs" Type="Edm.String" MaxLength="4"/>
+<Property Name="name1" Type="Edm.String" MaxLength="35"/>
+<Property Name="lifnr" Type="Edm.String" MaxLength="10"/>
+<Property Name="meins" Type="Edm.String" MaxLength="3"/>
+<Property Name="mtart" Type="Edm.String" MaxLength="4"/>
+<Property Name="aedat" Type="Edm.String" MaxLength="8"/>
+<Property Name="ekgrp" Type="Edm.String" MaxLength="3"/>
+<Property Name="brtwr" Type="Edm.Decimal" Scale="2" Precision="13"/>
+<Property Name="menge" Type="Edm.Decimal" Scale="3" Precision="13"/>
+<Property Name="netwr" Type="Edm.Decimal" Scale="2" Precision="13"/>
+</EntityType>
+<Annotations Target="DwcService.EntityContainer/PurchasingPerspective">
+<Annotation Term="Capabilities.DeleteRestrictions">
+<Record Type="Capabilities.DeleteRestrictionsType">
+<PropertyValue Property="Deletable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="Capabilities.InsertRestrictions">
+<Record Type="Capabilities.InsertRestrictionsType">
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="Capabilities.UpdateRestrictions">
+<Record Type="Capabilities.UpdateRestrictionsType">
+<PropertyValue Property="Updatable" Bool="false"/>
+</Record>
+</Annotation>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/bprme">
+<Annotation Term="Common.Label" String="BPRME"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/maktx">
+<Annotation Term="Common.Label" String="MAKTX"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/bsart">
+<Annotation Term="Common.Label" String="BSART"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/maktl">
+<Annotation Term="Common.Label" String="MATKL"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/ebeln">
+<Annotation Term="Common.Label" String="EBELN"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/land1">
+<Annotation Term="Common.Label" String="LAND1"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/matnr">
+<Annotation Term="Common.Label" String="MATNR"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/bstyp">
+<Annotation Term="Common.Label" String="BSTYP"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/ebelp">
+<Annotation Term="Common.Label" String="EBELP"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/ekorg">
+<Annotation Term="Common.Label" String="EKORG"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/bukrs">
+<Annotation Term="Common.Label" String="BUKRS"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/name1">
+<Annotation Term="Common.Label" String="NAME1"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/lifnr">
+<Annotation Term="Common.Label" String="LIFNR"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/meins">
+<Annotation Term="Common.Label" String="MEINS"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/mtart">
+<Annotation Term="Common.Label" String="MTART"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/aedat">
+<Annotation Term="Common.Label" String="AEDAT"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/ekgrp">
+<Annotation Term="Common.Label" String="EKGRP"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/brtwr">
+<Annotation Term="Common.Label" String="BRTWR"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/menge">
+<Annotation Term="Common.Label" String="MENGE"/>
+</Annotations>
+<Annotations Target="DwcService.PurchasingPerspective/netwr">
+<Annotation Term="Common.Label" String="NETWR"/>
+</Annotations>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

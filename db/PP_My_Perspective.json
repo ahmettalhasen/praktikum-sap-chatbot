@@ -1,0 +1,1447 @@
+{
+  "definitions": {
+    "∞DIM∞Supplier_Information": {
+      "kind": "entity",
+      "@EndUserText.label": "Supplier Information",
+      "elements": {
+        "MANDT": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] MANDT",
+          "length": 5000,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "LIFNR_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Account Number of Supplier",
+          "length": 10,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "LAND1_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Country/Region Key",
+          "length": 3,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "LAND1": {
+          "type": "cds.String",
+          "@EndUserText.label": "Country/Region Key",
+          "length": 3,
+          "@Analytics.dimension": true
+        },
+        "LIFNR": {
+          "type": "cds.String",
+          "@EndUserText.label": "Account Number of Supplier",
+          "length": 10,
+          "@Analytics.dimension": true
+        },
+        "NAME1_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Name 1",
+          "length": 35,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "NAME1": {
+          "type": "cds.String",
+          "@EndUserText.label": "Name 1",
+          "length": 35,
+          "@Analytics.dimension": true
+        }
+      },
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "query": {
+        "SELECT": {
+          "from": {
+            "SELECT": {
+              "from": {
+                "ref": [
+                  "Supplier_Information"
+                ],
+                "as": "Supplier_Information"
+              },
+              "columns": [
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "MANDT"
+                  ],
+                  "as": "MANDT"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LIFNR"
+                  ],
+                  "as": "Account Number of Supplier"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LIFNR"
+                  ],
+                  "as": "Account Number of Supplier_ID"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LAND1"
+                  ],
+                  "as": "Country/Region Key"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LAND1"
+                  ],
+                  "as": "Country/Region Key_ID"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "NAME1"
+                  ],
+                  "as": "Name 1"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "NAME1"
+                  ],
+                  "as": "Name 1_ID"
+                }
+              ]
+            },
+            "as": "Aggregate_Supplier_Information"
+          },
+          "columns": [
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "Country/Region Key"
+              ],
+              "as": "LAND1_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "Country/Region Key_ID"
+              ],
+              "as": "LAND1"
+            },
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "Account Number of Supplier"
+              ],
+              "as": "LIFNR_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "Account Number of Supplier_ID"
+              ],
+              "as": "LIFNR"
+            },
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "Name 1"
+              ],
+              "as": "NAME1_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "Name 1_ID"
+              ],
+              "as": "NAME1"
+            },
+            {
+              "ref": [
+                "Aggregate_Supplier_Information",
+                "MANDT"
+              ],
+              "as": "MANDT"
+            }
+          ]
+        }
+      },
+      "@DataWarehouse.enclosingEntity": "PP_My_Perspective"
+    },
+    "∞DIM∞Material_Information": {
+      "kind": "entity",
+      "@EndUserText.label": "Material Information",
+      "elements": {
+        "MAKTX": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material Description",
+          "length": 40,
+          "@Analytics.dimension": true
+        },
+        "MANDT": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] MANDT",
+          "length": 5000,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MTART_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material type",
+          "length": 4,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MATKL_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material Group",
+          "length": 9,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MTART": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material type",
+          "length": 4,
+          "@Analytics.dimension": true
+        },
+        "MATKL": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material Group",
+          "length": 9,
+          "@Analytics.dimension": true
+        },
+        "MAKTX_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material Description",
+          "length": 40,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MATNR_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material Number",
+          "length": 40,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MATNR": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material Number",
+          "length": 40,
+          "@Analytics.dimension": true
+        }
+      },
+      "@Analytics.dataCategory": {
+        "#": "DIMENSION"
+      },
+      "query": {
+        "SELECT": {
+          "from": {
+            "SELECT": {
+              "from": {
+                "ref": [
+                  "Material_Information"
+                ],
+                "as": "Material_Information"
+              },
+              "columns": [
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MANDT"
+                  ],
+                  "as": "MANDT"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MAKTX"
+                  ],
+                  "as": "Material Description"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MAKTX"
+                  ],
+                  "as": "Material Description_ID"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATKL"
+                  ],
+                  "as": "Material Group"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATKL"
+                  ],
+                  "as": "Material Group_ID"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATNR"
+                  ],
+                  "as": "Material Number"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATNR"
+                  ],
+                  "as": "Material Number_ID"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MTART"
+                  ],
+                  "as": "Material type"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MTART"
+                  ],
+                  "as": "Material type_ID"
+                }
+              ]
+            },
+            "as": "Aggregate_Material_Information"
+          },
+          "columns": [
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material Description"
+              ],
+              "as": "MAKTX_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material Description_ID"
+              ],
+              "as": "MAKTX"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material Group"
+              ],
+              "as": "MATKL_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material Group_ID"
+              ],
+              "as": "MATKL"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material Number"
+              ],
+              "as": "MATNR_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material Number_ID"
+              ],
+              "as": "MATNR"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material type"
+              ],
+              "as": "MTART_Label"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "Material type_ID"
+              ],
+              "as": "MTART"
+            },
+            {
+              "ref": [
+                "Aggregate_Material_Information",
+                "MANDT"
+              ],
+              "as": "MANDT"
+            }
+          ]
+        }
+      },
+      "@DataWarehouse.enclosingEntity": "PP_My_Perspective"
+    },
+    "PP_My_Perspective": {
+      "kind": "entity",
+      "@EndUserText.label": "My Perspective",
+      "elements": {
+        "Gross order value in PO currency": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "[Hidden] Gross order value in PO currency",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          },
+          "@Consumption.hidden": true
+        },
+        "LAND1_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Country/Region Key",
+          "length": 3,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MENGE": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "Purchase Order Quantity",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          }
+        },
+        "SupplierInformation_MANDT": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] MANDT",
+          "length": 5000,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "BUKRS": {
+          "type": "cds.String",
+          "@EndUserText.label": "Company Code",
+          "length": 4,
+          "@Analytics.dimension": true
+        },
+        "Net Order Value in PO Currency": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "[Hidden] Net Order Value in PO Currency",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          },
+          "@Consumption.hidden": true
+        },
+        "Net Order Value in PO Currency_1": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "[Hidden] Net Order Value in PO Currency",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          },
+          "@Consumption.hidden": true
+        },
+        "BRTWR": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "Gross order value in PO currency",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          }
+        },
+        "MATKL_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material Group",
+          "length": 9,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MTART": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material type",
+          "length": 4,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso1",
+            "MTART"
+          ]
+        },
+        "BSART": {
+          "type": "cds.String",
+          "@EndUserText.label": "Purchasing Document Type",
+          "length": 4,
+          "@Analytics.dimension": true
+        },
+        "BPRME": {
+          "type": "cds.String",
+          "@EndUserText.label": "Order Price Unit (Purchasing)",
+          "length": 3,
+          "@Analytics.dimension": true
+        },
+        "MaterialInformation_MANDT": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] MANDT",
+          "length": 5000,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MATNR": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material Number",
+          "length": 40,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso1",
+            "MATNR"
+          ]
+        },
+        "MAKTX": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material Description",
+          "length": 40,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso1",
+            "MAKTX"
+          ]
+        },
+        "Gross order value in PO currency_1": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "[Hidden] Gross order value in PO currency",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          },
+          "@Consumption.hidden": true
+        },
+        "EBELN": {
+          "type": "cds.String",
+          "@EndUserText.label": "Purchasing Document Number",
+          "length": 10,
+          "@Analytics.dimension": true
+        },
+        "LIFNR_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Account Number of Supplier",
+          "length": 10,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "∞Asso1": {
+          "type": "cds.Association",
+          "target": "∞DIM∞Material_Information",
+          "cardinality": {
+            "src": 0,
+            "min": 0,
+            "max": 1
+          },
+          "on": [
+            {
+              "ref": [
+                "MATNR"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "∞Asso1",
+                "MATNR"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "MaterialInformation_MANDT"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "∞Asso1",
+                "MANDT"
+              ]
+            }
+          ]
+        },
+        "∞Asso2": {
+          "type": "cds.Association",
+          "target": "∞DIM∞Supplier_Information",
+          "cardinality": {
+            "src": 0,
+            "min": 0,
+            "max": 1
+          },
+          "on": [
+            {
+              "ref": [
+                "LIFNR"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "∞Asso2",
+                "LIFNR"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "SupplierInformation_MANDT"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "∞Asso2",
+                "MANDT"
+              ]
+            }
+          ]
+        },
+        "AEDAT": {
+          "type": "cds.String",
+          "@EndUserText.label": "Creation Date of Purchasing Document",
+          "length": 8,
+          "@Analytics.dimension": true
+        },
+        "EBELP": {
+          "type": "cds.String",
+          "@EndUserText.label": "Item Number of Purchasing Document",
+          "length": 5,
+          "@Analytics.dimension": true
+        },
+        "MEINS": {
+          "type": "cds.String",
+          "@EndUserText.label": "Purchase Order Unit of Measure",
+          "length": 3,
+          "@Analytics.dimension": true
+        },
+        "LAND1": {
+          "type": "cds.String",
+          "@EndUserText.label": "Country/Region Key",
+          "length": 3,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso2",
+            "LAND1"
+          ]
+        },
+        "MAKTX_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material Description",
+          "length": 40,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "MATNR_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material Number",
+          "length": 40,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "NAME1": {
+          "type": "cds.String",
+          "@EndUserText.label": "Name 1",
+          "length": 35,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso2",
+            "NAME1"
+          ]
+        },
+        "EKGRP": {
+          "type": "cds.String",
+          "@EndUserText.label": "Purchasing Group",
+          "length": 3,
+          "@Analytics.dimension": true
+        },
+        "EKORG": {
+          "type": "cds.String",
+          "@EndUserText.label": "Purchasing organization",
+          "length": 4,
+          "@Analytics.dimension": true
+        },
+        "BSTYP": {
+          "type": "cds.String",
+          "@EndUserText.label": "Purchasing Document Category",
+          "length": 1,
+          "@Analytics.dimension": true
+        },
+        "NETWR": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "Net Order Value in PO Currency",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          }
+        },
+        "MTART_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Material type",
+          "length": 4,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        },
+        "Purchase Order Quantity_1": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "[Hidden] Purchase Order Quantity",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          },
+          "@Consumption.hidden": true
+        },
+        "Purchase Order Quantity": {
+          "type": "cds.Decimal",
+          "@EndUserText.label": "[Hidden] Purchase Order Quantity",
+          "precision": 32,
+          "scale": 5,
+          "@Aggregation.default": {
+            "#": "SUM"
+          },
+          "@AnalyticsDetails.measureType": {
+            "#": "BASE"
+          },
+          "@Consumption.hidden": true
+        },
+        "MATKL": {
+          "type": "cds.String",
+          "@EndUserText.label": "Material Group",
+          "length": 9,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso1",
+            "MATKL"
+          ]
+        },
+        "LIFNR": {
+          "type": "cds.String",
+          "@EndUserText.label": "Account Number of Supplier",
+          "length": 10,
+          "@Analytics.dimension": true,
+          "@Analytics.navigationAttributeRef": [
+            "∞Asso2",
+            "LIFNR"
+          ]
+        },
+        "NAME1_Label": {
+          "type": "cds.String",
+          "@EndUserText.label": "[Hidden] Name 1",
+          "length": 35,
+          "@Analytics.dimension": true,
+          "@Consumption.hidden": true
+        }
+      },
+      "query": {
+        "SELECT": {
+          "from": {
+            "SELECT": {
+              "from": {
+                "join": "left",
+                "cardinality": {
+                  "src": "*",
+                  "max": 1
+                },
+                "args": [
+                  {
+                    "join": "left",
+                    "cardinality": {
+                      "src": "*",
+                      "max": 1
+                    },
+                    "args": [
+                      {
+                        "ref": [
+                          "Purchasing_Document_Items"
+                        ],
+                        "as": "Purchasing_Document_Items"
+                      },
+                      {
+                        "ref": [
+                          "Material_Information"
+                        ],
+                        "as": "Material_Information"
+                      }
+                    ],
+                    "on": [
+                      {
+                        "ref": [
+                          "Purchasing_Document_Items",
+                          "MANDT"
+                        ]
+                      },
+                      "=",
+                      {
+                        "ref": [
+                          "Material_Information",
+                          "MANDT"
+                        ]
+                      },
+                      "and",
+                      {
+                        "ref": [
+                          "Purchasing_Document_Items",
+                          "MATNR"
+                        ]
+                      },
+                      "=",
+                      {
+                        "ref": [
+                          "Material_Information",
+                          "MATNR"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "ref": [
+                      "Supplier_Information"
+                    ],
+                    "as": "Supplier_Information"
+                  }
+                ],
+                "on": [
+                  {
+                    "ref": [
+                      "Purchasing_Document_Items",
+                      "MANDT"
+                    ]
+                  },
+                  "=",
+                  {
+                    "ref": [
+                      "Supplier_Information",
+                      "MANDT"
+                    ]
+                  },
+                  "and",
+                  {
+                    "ref": [
+                      "Purchasing_Document_Items",
+                      "LIFNR"
+                    ]
+                  },
+                  "=",
+                  {
+                    "ref": [
+                      "Supplier_Information",
+                      "LIFNR"
+                    ]
+                  }
+                ]
+              },
+              "columns": [
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "BRTWR"
+                  ],
+                  "as": "Gross order value in PO currency"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "NETWR"
+                  ],
+                  "as": "Net Order Value in PO Currency"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "MENGE"
+                  ],
+                  "as": "Purchase Order Quantity"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MAKTX"
+                  ],
+                  "as": "Material Description"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MAKTX"
+                  ],
+                  "as": "Material Description_ID"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATKL"
+                  ],
+                  "as": "Material Group"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATKL"
+                  ],
+                  "as": "Material Group_ID"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATNR"
+                  ],
+                  "as": "Material Number"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MATNR"
+                  ],
+                  "as": "Material Number_ID"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MTART"
+                  ],
+                  "as": "Material type"
+                },
+                {
+                  "ref": [
+                    "Material_Information",
+                    "MTART"
+                  ],
+                  "as": "Material type_ID"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LIFNR"
+                  ],
+                  "as": "Account Number of Supplier"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LIFNR"
+                  ],
+                  "as": "Account Number of Supplier_ID"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LAND1"
+                  ],
+                  "as": "Country/Region Key"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "LAND1"
+                  ],
+                  "as": "Country/Region Key_ID"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "NAME1"
+                  ],
+                  "as": "Name 1"
+                },
+                {
+                  "ref": [
+                    "Supplier_Information",
+                    "NAME1"
+                  ],
+                  "as": "Name 1_ID"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "BUKRS"
+                  ],
+                  "as": "Company Code"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "AEDAT"
+                  ],
+                  "as": "Creation Date of Purchasing Document"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "EBELP"
+                  ],
+                  "as": "Item Number of Purchasing Document"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "BPRME"
+                  ],
+                  "as": "Order Price Unit (Purchasing)"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "MEINS"
+                  ],
+                  "as": "Purchase Order Unit of Measure"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "BSTYP"
+                  ],
+                  "as": "Purchasing Document Category"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "EBELN"
+                  ],
+                  "as": "Purchasing Document Number"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "BSART"
+                  ],
+                  "as": "Purchasing Document Type"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "EKGRP"
+                  ],
+                  "as": "Purchasing Group"
+                },
+                {
+                  "ref": [
+                    "Purchasing_Document_Items",
+                    "EKORG"
+                  ],
+                  "as": "Purchasing organization"
+                },
+                {
+                  "as": "SupplierInformation_MANDT",
+                  "ref": [
+                    "Supplier_Information",
+                    "MANDT"
+                  ]
+                },
+                {
+                  "as": "MaterialInformation_MANDT",
+                  "ref": [
+                    "Material_Information",
+                    "MANDT"
+                  ]
+                }
+              ]
+            },
+            "as": "Project_Supplier_Information"
+          },
+          "columns": [
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material Group"
+              ],
+              "as": "MATKL_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material Group_ID"
+              ],
+              "as": "MATKL"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchasing Document Number"
+              ],
+              "as": "EBELN"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchasing Document Type"
+              ],
+              "as": "BSART"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Name 1"
+              ],
+              "as": "NAME1_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Name 1_ID"
+              ],
+              "as": "NAME1"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Creation Date of Purchasing Document"
+              ],
+              "as": "AEDAT"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchasing Document Category"
+              ],
+              "as": "BSTYP"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchasing organization"
+              ],
+              "as": "EKORG"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Item Number of Purchasing Document"
+              ],
+              "as": "EBELP"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material Description"
+              ],
+              "as": "MAKTX_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material Description_ID"
+              ],
+              "as": "MAKTX"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material Number"
+              ],
+              "as": "MATNR_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material Number_ID"
+              ],
+              "as": "MATNR"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchasing Group"
+              ],
+              "as": "EKGRP"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchase Order Unit of Measure"
+              ],
+              "as": "MEINS"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material type"
+              ],
+              "as": "MTART_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Material type_ID"
+              ],
+              "as": "MTART"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Order Price Unit (Purchasing)"
+              ],
+              "as": "BPRME"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Company Code"
+              ],
+              "as": "BUKRS"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Account Number of Supplier"
+              ],
+              "as": "LIFNR_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Account Number of Supplier_ID"
+              ],
+              "as": "LIFNR"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Country/Region Key"
+              ],
+              "as": "LAND1_Label"
+            },
+            {
+              "ref": [
+                "Project_Supplier_Information",
+                "Country/Region Key_ID"
+              ],
+              "as": "LAND1"
+            },
+            {
+              "as": "SupplierInformation_MANDT",
+              "ref": [
+                "Project_Supplier_Information",
+                "SupplierInformation_MANDT"
+              ]
+            },
+            {
+              "as": "MaterialInformation_MANDT",
+              "ref": [
+                "Project_Supplier_Information",
+                "MaterialInformation_MANDT"
+              ]
+            },
+            {
+              "as": "Gross order value in PO currency_1",
+              "ref": [
+                "Project_Supplier_Information",
+                "Gross order value in PO currency"
+              ]
+            },
+            {
+              "as": "Gross order value in PO currency",
+              "ref": [
+                "Project_Supplier_Information",
+                "Gross order value in PO currency"
+              ]
+            },
+            {
+              "as": "BRTWR",
+              "ref": [
+                "Project_Supplier_Information",
+                "Gross order value in PO currency"
+              ]
+            },
+            {
+              "as": "Purchase Order Quantity_1",
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchase Order Quantity"
+              ]
+            },
+            {
+              "as": "Purchase Order Quantity",
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchase Order Quantity"
+              ]
+            },
+            {
+              "as": "MENGE",
+              "ref": [
+                "Project_Supplier_Information",
+                "Purchase Order Quantity"
+              ]
+            },
+            {
+              "as": "Net Order Value in PO Currency_1",
+              "ref": [
+                "Project_Supplier_Information",
+                "Net Order Value in PO Currency"
+              ]
+            },
+            {
+              "as": "Net Order Value in PO Currency",
+              "ref": [
+                "Project_Supplier_Information",
+                "Net Order Value in PO Currency"
+              ]
+            },
+            {
+              "as": "NETWR",
+              "ref": [
+                "Project_Supplier_Information",
+                "Net Order Value in PO Currency"
+              ]
+            },
+            {
+              "ref": [
+                "∞Asso2"
+              ]
+            },
+            {
+              "ref": [
+                "∞Asso1"
+              ]
+            }
+          ],
+          "mixin": {
+            "∞Asso1": {
+              "type": "cds.Association",
+              "target": "∞DIM∞Material_Information",
+              "cardinality": {
+                "src": 0,
+                "min": 0,
+                "max": 1
+              },
+              "on": [
+                {
+                  "ref": [
+                    "$projection",
+                    "MATNR"
+                  ]
+                },
+                "=",
+                {
+                  "ref": [
+                    "∞Asso1",
+                    "MATNR"
+                  ]
+                },
+                "and",
+                {
+                  "ref": [
+                    "$projection",
+                    "MaterialInformation_MANDT"
+                  ]
+                },
+                "=",
+                {
+                  "ref": [
+                    "∞Asso1",
+                    "MANDT"
+                  ]
+                }
+              ]
+            },
+            "∞Asso2": {
+              "type": "cds.Association",
+              "target": "∞DIM∞Supplier_Information",
+              "cardinality": {
+                "src": 0,
+                "min": 0,
+                "max": 1
+              },
+              "on": [
+                {
+                  "ref": [
+                    "$projection",
+                    "LIFNR"
+                  ]
+                },
+                "=",
+                {
+                  "ref": [
+                    "∞Asso2",
+                    "LIFNR"
+                  ]
+                },
+                "and",
+                {
+                  "ref": [
+                    "$projection",
+                    "SupplierInformation_MANDT"
+                  ]
+                },
+                "=",
+                {
+                  "ref": [
+                    "∞Asso2",
+                    "MANDT"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "@Analytics.dataCategory": {
+        "#": "CUBE"
+      },
+      "@ObjectModel.supportedCapabilities": [
+        {
+          "#": "ANALYTICAL_PROVIDER"
+        }
+      ],
+      "@ObjectModel.modelingPattern": {
+        "#": "ANALYTICAL_CUBE"
+      },
+      "@DataWarehouse.editorType": {
+        "#": "DWCBusinessLayerEditor"
+      }
+    }
+  },
+  "businessLayerDefinitions": {
+    "PP_My_Perspective": {
+      "uniqueDimensionNames": {
+        "Material Information": "∞DIM∞Material_Information",
+        "Supplier Information": "∞DIM∞Supplier_Information"
+      }
+    }
+  },
+  "meta": {
+    "creator": "C4S Java Query API"
+  },
+  "version": {
+    "csn": "1.0"
+  }
+}
