@@ -8,6 +8,7 @@
   "dependencies": {
     "@sap/cds": "^5",
     "@sap/xssec": "^3.2.13",
+    "datalib": "^1.9.3",
     "express": "^4",
     "hdb": "^0.18.3",
     "passport": "^0.6.0"
@@ -48,11 +49,11 @@
       "DwcService": {
         "kind": "odata",
         "model": "srv/external/DwcService",
-            "credentials": {
-            "destination": "dwc",
-            "path": "/dwc"
-            }
+        "credentials": {
+          "destination": "dwc",
+          "path": "/dwc"
         }
+      }
     }
   }
 }

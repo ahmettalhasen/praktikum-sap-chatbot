@@ -1,5 +1,7 @@
 const cds = require('@sap/cds');
 
+const dl = require('datalib');
+
 
 module.exports = cds.service.impl(async (srv) => {
     const { PurchaseData } = srv.entities;    
@@ -90,5 +92,42 @@ module.exports = cds.service.impl(async (srv) => {
        //return backend.tx(request).read('PurchaseData').orderBy('bprme');
 
     })
+
+    srv.on('aggregate', async (request) => {
+        const query5 = { SELECT: {
+            from: {ref:['MyService.PurchaseData']},
+            limit: { rows: {val:1000}, offset: {val:0} },
+            orderBy: [
+              {ref:[ 'ebeln' ], sort: 'asc' },
+              {ref:[ 'ebelp' ], sort: 'asc' }
+            ]
+          }};
+          request.query = query5;
+          const tx = srv.tx(request);
+          const result = await backend.tx(request).run(request.query);
+          const res = request.reply(result);
+          var groupBy = dl.groupby('maktl').summarize({'menge': ['mean']}).execute(res);
+          var diagram = "https://quickchart.io/chart?c=";
+          var labels = [];
+          var data = [];
+          groupBy.forEach( entry => {
+              labels.push(entry.maktl);
+              data.push(entry.mean_menge);
+          })          
+          diagram += "{type:'bar', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
+          return diagram;
+    })
+
+
+    function formatArrayAsString(array) {
+        var result = "[";
+        array.forEach( entry => {
+            result += "'" + entry + "',";
+        })
+        result.slice(0, -1);
+        result += "]";
+        return result;
+    }
+    
 }); 
 

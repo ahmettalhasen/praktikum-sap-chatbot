@@ -18,6 +18,8 @@ service MyService {
     function sum() returns String(255);
 
     function helloWorld() returns String;
+
+    function aggregate() returns String;
 }
 
 
