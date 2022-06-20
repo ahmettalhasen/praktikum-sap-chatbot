@@ -1,6 +1,15 @@
 @url = http://localhost:4004
 
 
+GET {{url}}/my/PurchaseData?/groupby(maktl),aggregate(menge with max as maxMenge))
+
+
+//GET {{url}}/my/PurchaseData?$apply=groupby((status),aggregate(status with countdistinct as total))
+
+GET {{url}}/my/PurchaseData?$apply=filter(menge eq 49)/concat(aggregate($count as totalCount),groupby((maktx), aggregate($count as countPerYear)))
+
+
+
 GET {{url}}/data/getData
 
 
