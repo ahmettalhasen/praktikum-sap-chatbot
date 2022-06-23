@@ -118,10 +118,47 @@ module.exports = cds.service.impl(async (srv) => {
           return diagram;
     })
 
+    srv.on('selectgroup', async (request) => {
+        const params = request.req.query;
+        const selectAttribute = params.selectAttribute;
+        const groupAttribute = params.groupAttribute;
+        const aggregate = params.aggregate;
+        var type = "bar";
+        if (params.diagramtype != null && params.diagramtype != '') {
+            type = params.diagramtype;
+        }
+        const query5 = { SELECT: {
+            from: {ref:['MyService.PurchaseData']},
+            limit: { rows: {val:5000}, offset: {val:0} },
+            orderBy: [
+              {ref:[ 'ebeln' ], sort: 'asc' },
+              {ref:[ 'ebelp' ], sort: 'asc' }
+            ]
+          }};
+          request.query = query5;
+          const tx = srv.tx(request);
+          const result = await backend.tx(request).run(request.query);
+          const res = request.reply(result);
+          var groupBy = dl.groupby(groupAttribute).summarize({[selectAttribute]: [aggregate]}).execute(res);
+          var diagram = "https://quickchart.io/chart?c=";
+          var labels = [];
+          var data = [];
+          groupBy.forEach( entry => {
+              labels.push(Object.values(entry)[0]);
+              data.push(Object.values(entry)[1]);
+          })          
+          diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
+          //console.log(diagram);
+          return diagram;
+    })
 
     function formatArrayAsString(array) {
         var result = "[";
         array.forEach( entry => {
+            if (!isNaN(entry) && entry !== null) {
+                entry = +entry;
+                entry = entry.toFixed(2);
+            }
             result += "'" + entry + "',";
         })
         result.slice(0, -1);

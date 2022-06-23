@@ -20,6 +20,8 @@ service MyService {
     function helloWorld() returns String;
 
     function aggregate() returns String;
+
+    function selectgroup() returns String;
 }
 
 
