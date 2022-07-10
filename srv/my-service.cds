@@ -22,7 +22,6 @@ service MyService {
     function aggregate() returns String;
 
     function selectgroup() returns String;
+
+    function getData() returns String;
 }
-
-
-

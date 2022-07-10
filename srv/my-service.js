@@ -94,28 +94,17 @@ module.exports = cds.service.impl(async (srv) => {
     })
 
     srv.on('aggregate', async (request) => {
-        const query5 = { SELECT: {
-            from: {ref:['MyService.PurchaseData']},
-            limit: { rows: {val:1000}, offset: {val:0} },
-            orderBy: [
-              {ref:[ 'ebeln' ], sort: 'asc' },
-              {ref:[ 'ebelp' ], sort: 'asc' }
-            ]
-          }};
-          request.query = query5;
-          const tx = srv.tx(request);
-          const result = await backend.tx(request).run(request.query);
-          const res = request.reply(result);
-          var groupBy = dl.groupby('maktl').summarize({'menge': ['mean']}).execute(res);
-          var diagram = "https://quickchart.io/chart?c=";
-          var labels = [];
-          var data = [];
-          groupBy.forEach( entry => {
-              labels.push(entry.maktl);
-              data.push(entry.mean_menge);
-          })          
-          diagram += "{type:'bar', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
-          return diagram;
+        const purchaseData = await getPurchaseDataAll(request);
+        var groupBy = dl.groupby('maktl').summarize({'menge': ['mean']}).execute(purchaseData);
+        var diagram = "https://quickchart.io/chart?c=";
+        var labels = [];
+        var data = [];
+        groupBy.forEach( entry => {
+            labels.push(entry.maktl);
+            data.push(entry.mean_menge);
+        })          
+        diagram += "{type:'bar', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
+        return diagram;
     })
 
     srv.on('selectgroup', async (request) => {
@@ -127,30 +116,90 @@ module.exports = cds.service.impl(async (srv) => {
         if (params.diagramtype != null && params.diagramtype != '') {
             type = params.diagramtype;
         }
-        const query5 = { SELECT: {
-            from: {ref:['MyService.PurchaseData']},
-            limit: { rows: {val:5000}, offset: {val:0} },
-            orderBy: [
-              {ref:[ 'ebeln' ], sort: 'asc' },
-              {ref:[ 'ebelp' ], sort: 'asc' }
-            ]
-          }};
-          request.query = query5;
-          const tx = srv.tx(request);
-          const result = await backend.tx(request).run(request.query);
-          const res = request.reply(result);
-          var groupBy = dl.groupby(groupAttribute).summarize({[selectAttribute]: [aggregate]}).execute(res);
-          var diagram = "https://quickchart.io/chart?c=";
-          var labels = [];
-          var data = [];
-          groupBy.forEach( entry => {
-              labels.push(Object.values(entry)[0]);
-              data.push(Object.values(entry)[1]);
-          })          
-          diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
-          //console.log(diagram);
-          return diagram;
+        const purchaseData = await getPurchaseDataAll(request);
+        var groupBy = dl.groupby(groupAttribute).summarize({[selectAttribute]: [aggregate]}).execute(purchaseData);
+        var diagram = "https://quickchart.io/chart?c=";
+        var labels = [];
+        var data = [];
+        groupBy.forEach( entry => {
+            labels.push(Object.values(entry)[0]);
+            data.push(Object.values(entry)[1]);
+        })          
+        diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
+        //console.log(diagram);
+        return diagram;
     })
+
+    
+
+    srv.on('getData', async (request) => {
+        const params = request.req.query;
+        const selectAttribute = params.selectAttribute;
+        const groupAttribute = params.groupAttribute;
+        const groupAttributes = groupAttribute.split(";");
+        const aggregate = params.aggregate;
+        const limitNumber = params.limitNumber;
+        const limitType = params.limitType;
+
+        var type = "bar";
+        if (params.diagramType != null && params.diagramType != '') {
+            type = params.diagramType;
+        }
+
+        // Get All Data from Data Warehouse
+        const purchaseData = await getPurchaseDataAll(request);
+
+        var groupBy = dl.groupby(groupAttributes).summarize({[selectAttribute]: [aggregate]}).execute(purchaseData);
+        // console.log(groupBy)
+
+        if (limitNumber != null && limitNumber != '' && limitType != null && limitType != '') {
+            groupBy = filterLimit(groupBy, limitNumber, limitType, groupAttributes.length);
+        }
+        // console.log(groupBy)
+        var diagram = "https://quickchart.io/chart?c=";
+
+        if (groupAttributes.length > 1) {
+            let res = formatMultipleGroupBy(groupBy);
+            // console.log(res);
+            diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(res.atts) + ", datasets:[";
+            for (const [key, value] of Object.entries(res.data)) {
+                diagram += "{label:'" + key + "',data:" + formatArrayAsString(value) + "},";
+            }
+            diagram += "]}}"
+
+        } else {
+            var labels = [];
+            var data = [];
+            groupBy.forEach( entry => {
+                labels.push(Object.values(entry)[0]);
+                data.push(Object.values(entry)[1]);
+            })
+            diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}";
+        }
+        return diagram;  
+    })
+
+    async function getPurchaseDataAll(request) {
+        var data = [];
+        var offSet = 0;
+        for (let i = 0; i < 6; i++) {
+            var query5 = { SELECT: {
+                from: {ref:['MyService.PurchaseData']},
+                limit: { rows: {val:1000}, offset: {val:offSet} },
+                orderBy: [
+                    {ref:[ 'ebeln' ], sort: 'asc' },
+                    {ref:[ 'ebelp' ], sort: 'asc' }
+                ]
+            }};
+            offSet = offSet + 1000;
+            request.query = query5;
+            var tx = srv.tx(request);
+            var result = await backend.tx(request).run(request.query);
+            var res = request.reply(result);
+            data = data.concat(res);
+        }
+        return data
+    }
 
     function formatArrayAsString(array) {
         var result = "[";
@@ -164,6 +213,65 @@ module.exports = cds.service.impl(async (srv) => {
         result.slice(0, -1);
         result += "]";
         return result;
+    }
+
+    function formatMultipleGroupBy(data) {
+        let result = {};
+        const attr1Values = new Set();
+        const attr2Values = new Set();
+        data.forEach( entry => {
+            let att1 = Object.values(entry)[0]
+            let att2 = Object.values(entry)[1];
+            // if (att1 === null) {
+            //     att1 = "Unknown"
+            // }
+            // if (att2 === null) {
+            //     att2 = "Unknown"
+            // }
+            attr1Values.add(att1);
+            attr2Values.add(att2);
+        })
+        const attr1List = Array.from(attr1Values);
+        attr1List.sort();
+        const attr2List = Array.from(attr2Values);
+        attr2List.sort();
+    
+        attr1List.forEach( att1 => {
+            let values = [];
+            attr2List.forEach( att2 => {
+                let value = null;
+                data.forEach( entry => {
+                    if (Object.values(entry)[0] == att1 && Object.values(entry)[1] == att2) {
+                        value = Object.values(entry)[2];
+                    }
+                })
+                values.push(value);
+            })
+            result[att1] = values;
+        })
+        return {
+            atts: attr2List,
+            data: result
+        };
+    }
+
+    function filterLimit(data, limitNumber, limitType, sortedElement) {
+        let entries = sortByKey(data, sortedElement)
+        console.log(limitType)
+        if (limitType == "min") {
+            return entries.slice(0, limitNumber)
+        }
+        else {
+            return entries.slice(-limitNumber);
+        }
+    }
+    
+    function sortByKey(array, key) {
+        return array.sort( function(a, b) {
+            var x = Object.values(a)[key];
+            var y = Object.values(b)[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
     }
     
 }); 
