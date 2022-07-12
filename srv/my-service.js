@@ -78,7 +78,7 @@ module.exports = cds.service.impl(async (srv) => {
         //apply limit if specified
        
         //with only one group-by with filter it returns one single number
-        if (groupAttribute == null || (groupAttributes.length == 1 && filterValue != null)) {
+        if (groupAttributes == null) {
             var filteredDataSingleAtt = [];
             filteredData.forEach(entry => {
                     filteredDataSingleAtt.push(entry[selectAttribute]);
