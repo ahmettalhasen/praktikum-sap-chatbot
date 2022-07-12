@@ -2,11 +2,132 @@ const cds = require('@sap/cds');
 
 const dl = require('datalib');
 
+const dataAggregation = require('./dataAggregation.js')
+const diagramFormatter = require('./diagramFormatter.js')
+
 
 module.exports = cds.service.impl(async (srv) => {
     const { PurchaseData } = srv.entities;    
     const backend = await cds.connect.to('DwcService');
 
+
+
+    
+
+
+    
+    srv.on('getData', async (request) => {
+        // fecth data
+        const purchaseData = await getPurchaseDataAll(request);
+
+        // organize and check parameters
+        const params = request.req.query;
+        var selectAttribute = null;
+        if (params.selectAttribute != null && params.selectAttribute != '') {
+            selectAttribute = params.selectAttribute;
+        } else {
+            return "selectAttribute is not defined - please specify one."
+        }
+        var aggregate = "mean";
+        if (params.aggregate != null && params.aggregate != '') {
+            aggregate = params.aggregate;
+        } else {
+            return "aggregation method is not defined - please specify one."
+        }
+        var groupAttribute = null; 
+        var groupBy; 
+        var groupAttributes = null;
+        if (params.groupAttribute != null && params.groupAttribute != '') {
+            if (params.groupAttribute == ";") {
+                groupAttribute = null;
+            }
+            else {
+                groupAttribute = params.groupAttribute;
+                groupAttributes = groupAttribute.split(";").filter(element => element);
+            }
+        }
+        var limitNumber = null;
+        if (params.limitNumber != null && params.limitNumber != '') {
+            limitNumber = params.limitNumber;
+        }
+        var limitType = "max";
+        if (params.limitType != null && params.limitType != '') {
+            limitType = params.limitType;
+        }
+        var filterAttribute = null;
+        if (params.filterAttribute != null && params.filterAttribute != '') {
+            filterAttribute = params.filterAttribute;
+        }
+        var filterValue = null;
+        if (params.filterValue != null && params.filterValue != '') {
+            filterValue = params.filterValue;
+        }
+        var type = "bar";
+        if (params.diagramType != null && params.diagramType != '') {
+            type = params.diagramType;
+        }
+        var filteredData = [];
+        purchaseData.forEach(entry => {
+            if (filterValue != null) {
+                if (entry[filterAttribute] == null || entry[filterAttribute].toUpperCase() != filterValue.toUpperCase()) {
+                return;
+                }
+            }
+            filteredData.push(entry);
+        });
+        //apply limit if specified
+       
+        //with only one group-by with filter it returns one single number
+        if (groupAttribute == null || (groupAttributes.length == 1 && filterValue != null)) {
+            var filteredDataSingleAtt = [];
+            filteredData.forEach(entry => {
+                    filteredDataSingleAtt.push(entry[selectAttribute]);
+                });
+            aggregateResult = dataAggregation.calculateAggregation(filteredDataSingleAtt, aggregate);
+            return aggregateResult.toFixed(2); //text response
+        } else {
+            groupBy = dl.groupby(groupAttributes).summarize({[selectAttribute]: [aggregate]}).execute(filteredData);
+            if (limitNumber != null && limitNumber != '' && limitType != null && limitType != '') {
+                groupBy = dataAggregation.filterLimit(groupBy, limitNumber, limitType, 0, aggregate + "_" + selectAttribute)
+            }
+
+        }
+        return diagramFormatter.prepareDiagram(groupAttributes.length, groupBy, type);      
+    })
+    
+    async function getPurchaseDataAll(request) {
+        var data = [];
+        var offSet = 0;
+        for (let i = 0; i < 6; i++) {
+            var query5 = { SELECT: {
+                from: {ref:['MyService.PurchaseData']},
+                limit: { rows: {val:1000}, offset: {val:offSet} },
+                orderBy: [
+                    {ref:[ 'ebeln' ], sort: 'asc' },
+                    {ref:[ 'ebelp' ], sort: 'asc' }
+                ]
+            }};
+            offSet = offSet + 1000;
+            request.query = query5;
+            var tx = srv.tx(request);
+            var result = await backend.tx(request).run(request.query);
+            var res = request.reply(result);
+            data = data.concat(res);
+        }
+        return data
+    }
+    
+
+    
+
+
+
+
+
+
+
+    //DEPREACTED CODE - but mentioned in documentation, therefore still in
+    //Code is working, but outdate functionality
     srv.on('helloWorld', async (req) => {
         return "Hello World"
     })
@@ -132,7 +253,28 @@ module.exports = cds.service.impl(async (srv) => {
 
     
 
-    srv.on('getData', async (request) => {
+    
+
+   
+
+    function formatArrayAsString(array) {
+        var result = "[";
+        array.forEach( entry => {
+            if (!isNaN(entry) && entry !== null) {
+                entry = +entry;
+                entry = entry.toFixed(2);
+            }
+            result += "'" + entry + "',";
+        })
+        result.slice(0, -1);
+        result += "]";
+        return result;
+    }
+
+
+
+/*
+    srv.on('getData2', async (request) => {
         // fecth data
         const purchaseData = await getPurchaseDataAll(request);
 
@@ -189,6 +331,7 @@ module.exports = cds.service.impl(async (srv) => {
                     // console.log(filteredData)
                 }
                 var filteredDataSingleAtt = [];
+                
                 filteredData.forEach(entry => {
                     filteredDataSingleAtt.push(entry.aggVal);
                 })
@@ -204,6 +347,7 @@ module.exports = cds.service.impl(async (srv) => {
                         filteredData.push({aggVal: entry[selectAttribute]});
                     }
                 })
+                console.log(filteredData.length)
                 if (limitNumber != null && limitNumber != '' && limitType != null && limitType != '') {
                     filteredData = filterLimit(filteredData, limitNumber, limitType, groupAttributes.length-1)
                     // console.log(filteredData)
@@ -212,7 +356,6 @@ module.exports = cds.service.impl(async (srv) => {
                 filteredData.forEach(entry => {
                     filteredDataSingleAtt.push(entry.aggVal);
                 })
-                console.log(filteredDataSingleAtt)
                 aggregateResult = calculateAggregation(filteredDataSingleAtt, aggregate);
                 return aggregateResult.toFixed(2); 
             }
@@ -232,8 +375,9 @@ module.exports = cds.service.impl(async (srv) => {
     
         if (groupAttributes.length > 1) {
             let res = formatMultipleGroupBy(groupBy);
-            // console.log(res);
+            console.log(res);
             diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(res.atts) + ", datasets:["
+
             for (const [key, value] of Object.entries(res.data)) {
                 diagram += "{label:'" + key + "',data:" + formatArrayAsString(value) + "},";
             }
@@ -250,128 +394,5 @@ module.exports = cds.service.impl(async (srv) => {
         // console.log(diagram);
         return diagram;
     })
-
-    async function getPurchaseDataAll(request) {
-        var data = [];
-        var offSet = 0;
-        for (let i = 0; i < 6; i++) {
-            var query5 = { SELECT: {
-                from: {ref:['MyService.PurchaseData']},
-                limit: { rows: {val:1000}, offset: {val:offSet} },
-                orderBy: [
-                    {ref:[ 'ebeln' ], sort: 'asc' },
-                    {ref:[ 'ebelp' ], sort: 'asc' }
-                ]
-            }};
-            offSet = offSet + 1000;
-            request.query = query5;
-            var tx = srv.tx(request);
-            var result = await backend.tx(request).run(request.query);
-            var res = request.reply(result);
-            data = data.concat(res);
-        }
-        return data
-    }
-
-    function formatArrayAsString(array) {
-        var result = "[";
-        array.forEach( entry => {
-            if (!isNaN(entry) && entry !== null) {
-                entry = +entry;
-                entry = entry.toFixed(2);
-            }
-            result += "'" + entry + "',";
-        })
-        result.slice(0, -1);
-        result += "]";
-        return result;
-    }
-
-    function formatMultipleGroupBy(data) {
-        let result = {};
-        const attr1Values = new Set();
-        const attr2Values = new Set();
-        data.forEach( entry => {
-            let att1 = Object.values(entry)[0]
-            let att2 = Object.values(entry)[1];
-            // if (att1 === null) {
-            //     att1 = "Unknown"
-            // }
-            // if (att2 === null) {
-            //     att2 = "Unknown"
-            // }
-            attr1Values.add(att1);
-            attr2Values.add(att2);
-        })
-        const attr1List = Array.from(attr1Values);
-        attr1List.sort();
-        const attr2List = Array.from(attr2Values);
-        attr2List.sort();
-    
-        attr1List.forEach( att1 => {
-            let values = [];
-            attr2List.forEach( att2 => {
-                let value = null;
-                data.forEach( entry => {
-                    if (Object.values(entry)[0] == att1 && Object.values(entry)[1] == att2) {
-                        value = Object.values(entry)[2];
-                    }
-                })
-                values.push(value);
-            })
-            result[att1] = values;
-        })
-        return {
-            atts: attr2List,
-            data: result
-        };
-    }
-
-    function filterLimit(data, limitNumber, limitType, sortedElement) {
-        let entries = sortByKey(data, sortedElement)
-        console.log(limitType)
-        if (limitType == "min") {
-            return entries.slice(0, limitNumber)
-        }
-        else {
-            return entries.slice(-limitNumber);
-        }
-    }
-    
-    function sortByKey(array, key) {
-        return array.sort( function(a, b) {
-            var x = Object.values(a)[key];
-            var y = Object.values(b)[key];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        });
-    }
-
-    function calculateAggregation(array, aggregate) {
-        var aggregateResult = null
-        if (aggregate == "max") {
-            aggregateResult = Math.max(...array)
-        }
-        else if (aggregate == "min") {
-            aggregateResult = Math.min(...array)
-        }
-        else if (aggregate == "sum") {
-            // console.log(array)
-            aggregateResult = sum(array)
-        }
-        else {
-            // console.log(array)
-            aggregateResult = mean(array)
-        }
-        return aggregateResult
-    }
-
-    function mean(array) {
-        return array.reduce((a, b) => a + b, 0) / array.length;
-    }
-
-    function sum(array) {
-        return array.reduce((a, b) => a + b, 0);
-    }
-    
-}); 
-
+    */
+});

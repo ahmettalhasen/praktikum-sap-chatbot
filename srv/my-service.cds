@@ -24,4 +24,6 @@ service MyService {
     function selectgroup() returns String;
 
     function getData() returns String;
+    function getData2() returns String;
+
 }
