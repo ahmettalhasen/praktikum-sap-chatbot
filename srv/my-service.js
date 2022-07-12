@@ -133,50 +133,122 @@ module.exports = cds.service.impl(async (srv) => {
     
 
     srv.on('getData', async (request) => {
-        const params = request.req.query;
-        const selectAttribute = params.selectAttribute;
-        const groupAttribute = params.groupAttribute;
-        const groupAttributes = groupAttribute.split(";");
-        const aggregate = params.aggregate;
-        const limitNumber = params.limitNumber;
-        const limitType = params.limitType;
+        // fecth data
+        const purchaseData = await getPurchaseDataAll(request);
 
+        // organize and check parameters
+        const params = request.req.query;
+        var selectAttribute = null;
+        if (params.selectAttribute != null && params.selectAttribute != '') {
+            selectAttribute = params.selectAttribute;
+        }
+        var groupAttribute = null;  
+        if (params.groupAttribute != null && params.groupAttribute != '') {
+            if (params.groupAttribute == ";") {
+                groupAttribute = null;
+            }
+            else {
+                groupAttribute = params.groupAttribute;
+                var groupAttributes = groupAttribute.split(";").filter(element => element);
+            }
+        }
+        var aggregate = "mean";
+        if (params.aggregate != null && params.aggregate != '') {
+            aggregate = params.aggregate;
+        }
+        var limitNumber = null;
+        if (params.limitNumber != null && params.limitNumber != '') {
+            limitNumber = params.limitNumber;
+        }
+        var limitType = "max";
+        if (params.limitType != null && params.limitType != '') {
+            limitType = params.limitType;
+        }
+        var filterAttribute = null;
+        if (params.filterAttribute != null && params.filterAttribute != '') {
+            filterAttribute = params.filterAttribute;
+        }
+        var filterValue = null;
+        if (params.filterValue != null && params.filterValue != '') {
+            filterValue = params.filterValue;
+        }
         var type = "bar";
         if (params.diagramType != null && params.diagramType != '') {
             type = params.diagramType;
         }
-
-        // Get All Data from Data Warehouse
-        const purchaseData = await getPurchaseDataAll(request);
-
+    
+        if (groupAttribute == null || filterValue != null) {
+            // no group by no filter
+            if (groupAttribute == null && filterValue == null) {
+                var filteredData = [];
+                purchaseData.forEach(entry => {
+                    filteredData.push({aggVal: entry[selectAttribute]});
+                });
+                if (limitNumber != null && limitNumber != '' && limitType != null && limitType != '') {
+                    filteredData = filterLimit(filteredData, limitNumber, limitType, 0)
+                    // console.log(filteredData)
+                }
+                var filteredDataSingleAtt = [];
+                filteredData.forEach(entry => {
+                    filteredDataSingleAtt.push(entry.aggVal);
+                })
+                aggregateResult = calculateAggregation(filteredDataSingleAtt, aggregate);
+                return aggregateResult.toFixed(2);
+            }
+            // no group by but filter
+            else {
+                var aggregateResult = null
+                var filteredData = [];
+                purchaseData.forEach(entry => {
+                    if (entry[filterAttribute] != null && entry[filterAttribute].toUpperCase() == filterValue.toUpperCase()) {
+                        filteredData.push({aggVal: entry[selectAttribute]});
+                    }
+                })
+                if (limitNumber != null && limitNumber != '' && limitType != null && limitType != '') {
+                    filteredData = filterLimit(filteredData, limitNumber, limitType, groupAttributes.length-1)
+                    // console.log(filteredData)
+                }
+                var filteredDataSingleAtt = [];
+                filteredData.forEach(entry => {
+                    filteredDataSingleAtt.push(entry.aggVal);
+                })
+                console.log(filteredDataSingleAtt)
+                aggregateResult = calculateAggregation(filteredDataSingleAtt, aggregate);
+                return aggregateResult.toFixed(2); 
+            }
+        }
+        
+        var labels = [];
+        var data = [];
+        // console.log(purchaseData)
         var groupBy = dl.groupby(groupAttributes).summarize({[selectAttribute]: [aggregate]}).execute(purchaseData);
         // console.log(groupBy)
-
+    
         if (limitNumber != null && limitNumber != '' && limitType != null && limitType != '') {
-            groupBy = filterLimit(groupBy, limitNumber, limitType, groupAttributes.length);
+            groupBy = filterLimit(groupBy, limitNumber, limitType, groupAttributes.length)
         }
         // console.log(groupBy)
         var diagram = "https://quickchart.io/chart?c=";
-
+    
         if (groupAttributes.length > 1) {
             let res = formatMultipleGroupBy(groupBy);
             // console.log(res);
-            diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(res.atts) + ", datasets:[";
+            diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(res.atts) + ", datasets:["
             for (const [key, value] of Object.entries(res.data)) {
                 diagram += "{label:'" + key + "',data:" + formatArrayAsString(value) + "},";
             }
             diagram += "]}}"
-
+    
         } else {
-            var labels = [];
-            var data = [];
             groupBy.forEach( entry => {
                 labels.push(Object.values(entry)[0]);
                 data.push(Object.values(entry)[1]);
             })
-            diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}";
+            diagram += "{type:'" + type + "', data:{labels:" + formatArrayAsString(labels) + ", datasets:[{label:'Products',data:" + formatArrayAsString(data) + "}]}}"
         }
-        return diagram;  
+        
+        // console.log(diagram);
+        return diagram;
     })
 
     async function getPurchaseDataAll(request) {
@@ -272,6 +344,33 @@ module.exports = cds.service.impl(async (srv) => {
             var y = Object.values(b)[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
+    }
+
+    function calculateAggregation(array, aggregate) {
+        var aggregateResult = null
+        if (aggregate == "max") {
+            aggregateResult = Math.max(...array)
+        }
+        else if (aggregate == "min") {
+            aggregateResult = Math.min(...array)
+        }
+        else if (aggregate == "sum") {
+            // console.log(array)
+            aggregateResult = sum(array)
+        }
+        else {
+            // console.log(array)
+            aggregateResult = mean(array)
+        }
+        return aggregateResult
+    }
+
+    function mean(array) {
+        return array.reduce((a, b) => a + b, 0) / array.length;
+    }
+
+    function sum(array) {
+        return array.reduce((a, b) => a + b, 0);
     }
     
 }); 
