@@ -72,6 +72,7 @@ module.exports = cds.service.impl(async (srv) => {
         if (params.diagramType != null && params.diagramType != '') {
             type = params.diagramType;
         }
+
         var filteredData = [];
         purchaseData.forEach(entry => {
             if (filterValue != null) {
@@ -97,6 +98,12 @@ module.exports = cds.service.impl(async (srv) => {
                 groupBy = dataAggregation.filterLimit(groupBy, limitNumber, limitType, 0, aggregate + "_" + selectAttribute)
             }
 
+        }
+
+        if(type === "raw") {
+            let myString = JSON.stringify(groupBy, null, 4); // 4 space indentations
+            //console.log(myString);
+            return myString;
         }
         return diagramFormatter.prepareDiagram(groupAttributes.length, groupBy, type);      
     })
