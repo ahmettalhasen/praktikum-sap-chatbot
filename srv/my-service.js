@@ -44,6 +44,12 @@ module.exports = cds.service.impl(async (srv) => {
             else {
                 groupAttribute = params.groupAttribute;
                 groupAttributes = groupAttribute.split(";").filter(element => element);
+                console.log(groupAttributes);
+                if (groupAttributes.length > 1 && groupAttributes[0] === groupAttributes[1]) {
+                    groupAttributes = [...new Set(groupAttributes)]
+                    console.log(groupAttributes);
+
+                }
             }
         }
         var limitNumber = null;
