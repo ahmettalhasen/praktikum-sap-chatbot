@@ -1,8 +1,9 @@
+// Function to group by a list of json based on two keys
 function formatMultipleGroupBy(data) {
     let result = {};
     const attr1Values = new Set();
     const attr2Values = new Set();
-    data.forEach( entry => {
+    data.forEach(entry => {
         let att1 = Object.values(entry)[0]
         let att2 = Object.values(entry)[1];
         attr1Values.add(att1);
@@ -13,11 +14,11 @@ function formatMultipleGroupBy(data) {
     const attr2List = Array.from(attr2Values);
     attr2List.sort();
 
-    attr1List.forEach( att1 => {
+    attr1List.forEach(att1 => {
         let values = [];
-        attr2List.forEach( att2 => {
+        attr2List.forEach(att2 => {
             let value = null;
-            data.forEach( entry => {
+            data.forEach(entry => {
                 if (Object.values(entry)[0] == att1 && Object.values(entry)[1] == att2) {
                     value = Object.values(entry)[2];
                 }
@@ -32,9 +33,10 @@ function formatMultipleGroupBy(data) {
     };
 }
 
+// Function to convert array into string form
 function formatArrayAsString(array) {
     var result = "[";
-    array.forEach( entry => {
+    array.forEach(entry => {
         if (!isNaN(entry) && entry !== null) {
             entry = +entry;
             entry = entry.toFixed(2);
@@ -46,6 +48,7 @@ function formatArrayAsString(array) {
     return result;
 }
 
+// Function to create diagram with quickchart
 function prepareDiagram(size, groupBy, type) {
     var labels = [];
     var data = [];
@@ -59,7 +62,7 @@ function prepareDiagram(size, groupBy, type) {
         diagram += "]}}"
 
     } else {
-        groupBy.forEach( entry => {
+        groupBy.forEach(entry => {
             labels.push(Object.values(entry)[0]);
             data.push(Object.values(entry)[1]);
         })
@@ -69,5 +72,6 @@ function prepareDiagram(size, groupBy, type) {
 }
 
 module.exports = {
+    formatArrayAsString,
     prepareDiagram,
 }

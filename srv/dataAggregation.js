@@ -1,3 +1,4 @@
+// Function to apply given aggregation methods
 function calculateAggregation(array, aggregate) {
     var aggregateResult = null
     if (aggregate == "max") {
@@ -17,14 +18,17 @@ function calculateAggregation(array, aggregate) {
     return aggregateResult
 }
 
+// Function to calculate average of a list
 function mean(array) {
     return array.reduce((a, b) => a + b, 0) / array.length;
 }
 
+// Function to calculate sum of a list
 function sum(array) {
     return array.reduce((a, b) => a + b, 0);
 }
 
+// Function to filter data points by limitNumber many and top or bottom 
 function filterLimit(data, limitNumber, limitType, sortedElement, selectAttribute) {
     let entries = sortByKey(data, sortedElement, selectAttribute)
     if (limitType == "bottom") {
@@ -35,8 +39,9 @@ function filterLimit(data, limitNumber, limitType, sortedElement, selectAttribut
     }
 }
 
+// Function to sort a list of jsons based on a given key
 function sortByKey(array, key, selectAttribute) {
-    return array.sort( function(a, b) {
+    return array.sort(function (a, b) {
         var x = a[selectAttribute];
         var y = b[selectAttribute];
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
