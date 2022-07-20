@@ -44,11 +44,8 @@ module.exports = cds.service.impl(async (srv) => {
                 // Format group attributes as a list
                 groupAttribute = params.groupAttribute;
                 groupAttributes = groupAttribute.split(";").filter(element => element);
-                console.log(groupAttributes);
                 if (groupAttributes.length > 1 && groupAttributes[0] === groupAttributes[1]) {
                     groupAttributes = [...new Set(groupAttributes)]
-                    console.log(groupAttributes);
-
                 }
             }
         }
@@ -70,6 +67,8 @@ module.exports = cds.service.impl(async (srv) => {
         if (params.filterValue != null && params.filterValue != '') {
             filterValue = params.filterValue;
         }
+
+        // Check diagram type
         var type = "bar";
         if (params.diagramType != null && params.diagramType != '') {
             type = params.diagramType;
@@ -107,7 +106,6 @@ module.exports = cds.service.impl(async (srv) => {
 
         if (type === "raw") {
             let myString = JSON.stringify(groupBy, null, 4); // 4 space indentations
-            //console.log(myString);
             return myString;
         }
         return diagramFormatter.prepareDiagram(groupAttributes.length, groupBy, type);

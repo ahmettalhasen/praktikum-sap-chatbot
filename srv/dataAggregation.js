@@ -8,11 +8,9 @@ function calculateAggregation(array, aggregate) {
         aggregateResult = Math.min(...array)
     }
     else if (aggregate == "sum") {
-        // console.log(array)
         aggregateResult = sum(array)
     }
     else {
-        // console.log(array)
         aggregateResult = mean(array)
     }
     return aggregateResult
